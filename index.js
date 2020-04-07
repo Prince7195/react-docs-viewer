@@ -1,44 +1,35 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import './style.css';
-import { response } from './data';
+import { pdfData } from './pdfData';
+import { htmlData } from './htmlData';
 import { Document, Page } from 'react-pdf';
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      numPages: null,
-      pageNumber: 1,
-    }
   }
 
-  onDocumentLoadSuccess = ({ numPages }) => {
-    this.setState({ numPages });
-  }
+  view(data, type) {
+    var objbuilder = `<iframe width="100%" height="100%" src="data:${type};base64,${data}" type="text/html" class="internal">
+        <embed src="text/html;base64,${data} type="${type}" />
+    </iframe>
+    `;
 
-  pdf() {
-    const byteCharacters = atob(response);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], {type: 'application/pdf'});
+    var win = window.open("","_blank","titlebar=yes");
+        win.document.title = "My Title";
+        win.document.write('<html><body>');
+        win.document.write(objbuilder);
+        win.document.write('</body></html>');
   }
 
   render() {
-    const { pageNumber, numPages } = this.state;
     return (
       <div>
         <h1>View PDF</h1>
-        <Document
-          file={this.pdf()}
-          onLoadSuccess={this.onDocumentLoadSuccess}
-        >
-          <Page pageNumber={pageNumber} />
-        </Document>
-        <p>Page {pageNumber} of {numPages}</p>
+        <button id="view-pdf" onClick={() => this.view(pdfData, 'application/pdf')}>View PDF</button>
+        <hr />
+        <button id="view-html" onClick={() => this.view(htmlData, 'text/html')}>View HTML</button>
       </div>
     );
   }
