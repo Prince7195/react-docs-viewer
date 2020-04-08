@@ -12,7 +12,7 @@ class App extends Component {
 
   view(data, type) {
     var objbuilder = `<iframe width="100%" height="100%" src="data:${type};base64,${data}" type="text/html" class="internal">
-        <embed src="text/html;base64,${data} type="${type}" />
+        <embed src="text/html;base64,${data}" type="${type}" />
     </iframe>
     `;
 
