@@ -16,11 +16,31 @@ class App extends Component {
     </iframe>
     `;
 
-    var win = window.open("","_blank","titlebar=yes");
-        win.document.title = "My Title";
-        win.document.write('<html><body>');
-        win.document.write(objbuilder);
-        win.document.write('</body></html>');
+    const win = window.open("","_blank","titlebar=yes,width = 800, height = 600");
+    if (win) {
+      const document = `<html>
+                    <head>
+                      <title>${name}</title>
+                      <link href="core/css/bootstrap.min.css" rel="stylesheet">
+                      <link href="core/css/bell.css" rel="stylesheet">
+                      <link href="core/css/global-connector.css" rel="stylesheet">
+                    </head>
+                    <body>
+                      <div style="background-color:#fff">
+                        <br />
+                        <a class="btn btn-secondary floatR"
+                          download="${name}"
+                          href="data:application/octet-stream;base64,${encodeURIComponent(
+                            data.content
+                          )}"
+                        >Download</a>
+                        <br />
+                        ${objbuilder}
+                      </div>
+                    </body>
+                  </html>`;
+      win.document.write(document);
+    }
   }
 
   render() {
